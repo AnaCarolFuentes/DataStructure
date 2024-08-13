@@ -134,9 +134,11 @@ void menuOpcoes(Lista * estoque)
             else
                 imprimirProduto(produto);
             break;
+
         case 7:
             imprimirLista(estoque);
             break;
+
         case 8:
             printf("Digite o codigo do produto que deseja mover para o inicio: ");
             scanf("%d", &codigo);
@@ -146,8 +148,13 @@ void menuOpcoes(Lista * estoque)
             else
                 printf("Sucesso ao mover produto para o inicio do estoque!\n");
             break;
-        
+
+        case 0:
+            pintf("Saindo...\n");
+            break;
+            
         default:
+            printf("Opcao invalida!\n");
             break;
         }
     } while (opcao != 0);
@@ -471,4 +478,3 @@ int encontrarCodigo(Lista * lista, int codigo)
 /*
 Onde é melhor para eu rodar a verificacão se o código já existe no estoque para que não tenha mais produtos com um mesmo código?
 */
-
