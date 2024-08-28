@@ -34,11 +34,19 @@ int removerProduto(Lista *, int);
 int atualizarQuantidade(Lista *, int, int);
 int encontrarCodigo(Lista *, int);
 Produto * buscarProduto(Lista *, int);
+<<<<<<< HEAD
 Produto * novoProduto();
 void mensagemListaVazia(char *);
 void mensagemValida(char *, int);
 void mensagemCodigoProduto(char *, int);
 void lerDadosProduto(Produto *);
+=======
+Produto * novoProduto(Lista *);
+void mensagemListaVazia(char *);
+void mensagemValida(char *, int);
+void mensagemCodigoProduto(char *, int);
+void lerDadosProduto(Produto *, Lista*);
+>>>>>>> 883756f9dda5f78cd0f3dbebbc1bfcd0dea2f88f
 void menuOpcoes();
 
 
@@ -67,12 +75,12 @@ int main()
         switch (opcao)
         {
         case 1:
-            retorno = adicionarProdutoInicio(&estoque, novoProduto());
+            retorno = adicionarProdutoInicio(&estoque, novoProduto(&estoque));
             mensagemValida("adicionar", retorno);
             break;
 
         case 2:
-            retorno = adicionarProdutoFim(&estoque, novoProduto());
+            retorno = adicionarProdutoFim(&estoque, novoProduto(&estoque));
             mensagemValida("adicionar", retorno);
             break;
 
@@ -84,7 +92,7 @@ int main()
                 printf("Posicao invalida!\n");
                 break;
             }
-            retorno = adicionarProdutoMeio(&estoque, novoProduto(), posicao);
+            retorno = adicionarProdutoMeio(&estoque, novoProduto(&estoque), posicao);
             mensagemValida("adicionar", retorno);
             break;
         
@@ -200,7 +208,7 @@ void mensagemListaVazia(char * mensagem)
     printf("Nao foi possivel %s a/na lista, pois ela esta vazia\n", mensagem);
 }
 
-Produto * novoProduto ()
+Produto * novoProduto (Lista * lista)
 {
     Produto * novoProduto = (Produto*) malloc (sizeof(Produto));
 
@@ -210,11 +218,12 @@ Produto * novoProduto ()
     novoProduto->proximo = NULL;
     novoProduto->anterior = NULL;
 
-    lerDadosProduto (novoProduto);
+    lerDadosProduto (novoProduto, lista);
     return novoProduto;
 }
 
-void lerDadosProduto (Produto * produto)
+//retorna o codigo do novo produto
+void lerDadosProduto (Produto * produto, Lista * lista)
 {
     int codigo, quantidade;
     char nome[50];
@@ -223,6 +232,16 @@ void lerDadosProduto (Produto * produto)
     printf("Digite o codigo do produto: ");
     scanf("%d", &codigo);
     produto->codigo = codigo;
+<<<<<<< HEAD
+=======
+    
+    if(encontrarCodigo(lista, produto->codigo) == 1)
+    {
+        printf("O código %d ja existe na lista!\n", produto->codigo);
+        return;
+    }
+    
+>>>>>>> 883756f9dda5f78cd0f3dbebbc1bfcd0dea2f88f
     printf("Digite o nome do produto: ");
     scanf("%s", nome);
     strcpy(produto->nome, nome);
@@ -236,6 +255,7 @@ void lerDadosProduto (Produto * produto)
     produto->preco = preco;
 
     printf("-------------------------\n");
+
 }
 
 int adicionarProdutoInicio(Lista * lista, Produto * produto)
@@ -245,6 +265,11 @@ int adicionarProdutoInicio(Lista * lista, Produto * produto)
         lista->inicio = produto;
         lista->fim = produto;
     }
+    else if(encontrarCodigo(lista, produto->codigo == 1))
+    {
+        return 2;
+    }
+    
     else 
     {
         produto->proximo = lista->inicio;
@@ -263,6 +288,10 @@ int adicionarProdutoFim(Lista * lista, Produto * produto)
         lista->inicio = produto;
         lista->fim = produto;
     }
+    else if(encontrarCodigo(lista, produto->codigo == 1))
+    {
+        return 2;
+    }
     else
     {
         lista->fim->proximo = produto;
@@ -279,6 +308,10 @@ int adicionarProdutoMeio(Lista * lista, Produto * produto, int posicao)
     {
         lista->inicio = produto;
         lista->fim = produto;
+    }
+    else if(encontrarCodigo(lista, produto->codigo == 1))
+    {
+        return 2;
     }
     else if (posicao == 1)
     {
