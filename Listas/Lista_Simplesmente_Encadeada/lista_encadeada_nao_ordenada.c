@@ -22,7 +22,7 @@ int insereNoFim (Lista *, int);
 int inicializaLista (Lista *);
 Lista * concatena (Lista *, Lista *);
 int imprimeLista(Lista *);
-Lista * separa (Lista *, int);
+Lista * separaPosicao (Lista *, int);
 void mensagemListaVazia (char []);
 void mensagemSepararLista (char []);
 
@@ -56,7 +56,7 @@ int main()
 
     //cria outra lista para guardar o endereço recebido da função separa()
     //A funçao separa vai retornar um endereço para um subconjunto da lista 1
-    Lista * novaLista = separa(&l1, 50);
+    Lista * novaLista = separa(&l1, 5);
 
     //imprime a lista 1 depois de ser separada
     printf("\n----------Imprimindo Lista1------------\n");
@@ -156,8 +156,8 @@ Lista * concatena (Lista * list1, Lista * list2)
         return list1;
 }
 
-//Separa duas listas
-Lista * separa (Lista * list, int l)
+//Separa duas listas pela posicao
+Lista * separaPosicao (Lista * list, int l)
 {
     int i;
 

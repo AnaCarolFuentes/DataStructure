@@ -37,8 +37,9 @@ Produto * buscarProduto(Lista *, int);
 Produto * novoProduto();
 void mensagemListaVazia(char *);
 void mensagemValida(char *, int);
+void mensagemCodigoProduto(char *, int);
 void lerDadosProduto(Produto *);
-void menuOpcoes(Lista *);
+void menuOpcoes();
 
 
 int main()
@@ -46,12 +47,7 @@ int main()
     Lista estoque;
     inicializarLista(&estoque);
 
-    menuOpcoes(&estoque);
-}
-
-void menuOpcoes(Lista * estoque)
-{
-    int opcao = 1;
+     int opcao = 1;
 
     //Menu opcoes
     do
@@ -61,16 +57,7 @@ void menuOpcoes(Lista * estoque)
         int codigo;
         int quantidade;
 
-        printf("\n------GERENCIAMENTO DE ESTOQUE-----\n");
-        printf("1 - Adicionar produto no Inicio do Estoque\n");
-        printf("2 - Adicionar produto no Fim do Estoque\n");
-        printf("3 - Adicionar produto em uma posicao especifica do Estoque\n");
-        printf("4 - Remover produto do Estoque\n");
-        printf("5 - Atualizar quantidade do produto\n");
-        printf("6 - Buscar produto no Estoque\n");
-        printf("7 - Imprimir produtos do Estoque\n");
-        printf("8 - Mover produto para o Inicio do Estoque\n");
-        printf("0 - Sair\n");
+        menuOpcoes();
 
         printf("Opcao: ");
         scanf("%d", &opcao);
@@ -80,32 +67,31 @@ void menuOpcoes(Lista * estoque)
         switch (opcao)
         {
         case 1:
-            retorno = adicionarProdutoInicio(estoque, novoProduto());
+            retorno = adicionarProdutoInicio(&estoque, novoProduto());
             mensagemValida("adicionar", retorno);
             break;
 
         case 2:
-            retorno = adicionarProdutoFim(estoque, novoProduto());
+            retorno = adicionarProdutoFim(&estoque, novoProduto());
             mensagemValida("adicionar", retorno);
             break;
 
         case 3:
             printf("Digite a posicao desejada: ");
             scanf("%d", &posicao);
-            if(posicao > estoque->quantidade || posicao < 1)
+            if(posicao > estoque.quantidade || posicao < 1)
             {
                 printf("Posicao invalida!\n");
                 break;
             }
-            retorno = adicionarProdutoMeio(estoque, novoProduto(), posicao);
+            retorno = adicionarProdutoMeio(&estoque, novoProduto(), posicao);
             mensagemValida("adicionar", retorno);
             break;
         
         case 4: 
             printf("Digite o codigo do produto que deseja remover: ");
             scanf("%d", &codigo);
-
-            retorno = removerProduto(estoque, codigo);
+            retorno = removerProduto(&estoque, codigo);
             mensagemValida("remover", retorno);
             printf("Codigo do produto removido: %d\n", codigo);
             break;
@@ -116,7 +102,7 @@ void menuOpcoes(Lista * estoque)
             printf("Digite a nova quantidade: ");
             scanf("%d", &quantidade);
 
-            retorno = atualizarQuantidade(estoque, codigo, quantidade);
+            retorno = atualizarQuantidade(&estoque, codigo, quantidade);
 
             if(retorno == 1) 
                 mensagemValida("atualizar quantidade do", retorno);
@@ -127,30 +113,53 @@ void menuOpcoes(Lista * estoque)
         case 6:
             printf("Digite o codigo do produto que deseja buscar: ");
             scanf("%d", &codigo);
-            Produto * produto = buscarProduto(estoque, codigo);
+
+            Produto * produto = buscarProduto(&estoque, codigo);
 
             if(produto == NULL)
                 printf("Codigo do produto nao encontrado!\n");
             else
                 imprimirProduto(produto);
             break;
+
         case 7:
-            imprimirLista(estoque);
+            imprimirLista(&estoque);
             break;
+
         case 8:
             printf("Digite o codigo do produto que deseja mover para o inicio: ");
             scanf("%d", &codigo);
-            retorno = moverParaInicio(estoque, codigo);
+            retorno = moverParaInicio(&estoque, codigo);
             if(retorno == 0) 
                 printf("Codigo do produto nao encontrado!\n");
             else
                 printf("Sucesso ao mover produto para o inicio do estoque!\n");
             break;
-        
+
+        case 0:
+            printf("Saindo...\n");
+            break;
+
         default:
+            printf("Opcao invalida!\n");
             break;
         }
     } while (opcao != 0);
+}
+
+void menuOpcoes()
+{
+    printf("\n------GERENCIAMENTO DE ESTOQUE-----\n");
+    printf("1 - Adicionar produto no Inicio do Estoque\n");
+    printf("2 - Adicionar produto no Fim do Estoque\n");
+    printf("3 - Adicionar produto em uma posicao especifica do Estoque\n");
+    printf("4 - Remover produto do Estoque\n");
+    printf("5 - Atualizar quantidade do produto\n");
+    printf("6 - Buscar produto no Estoque\n");
+    printf("7 - Imprimir produtos do Estoque\n");
+    printf("8 - Mover produto para o Inicio do Estoque\n");
+    printf("0 - Sair\n");
+   
 }
 
 int inicializarLista (Lista * lista)
@@ -466,6 +475,7 @@ int encontrarCodigo(Lista * lista, int codigo)
 
     return 0;
 }
+
 
 //Perguntas 
 /*
