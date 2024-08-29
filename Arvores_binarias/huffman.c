@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef char byte;
 
@@ -36,7 +37,9 @@ void printHuffmanTree (NodeTree * root); //Fazer essa função
 void freeHuffmanTree (NodeTree * root);
 void buildFrequencyandBufferArray (char * file_name, int * frequency, byte ** buffer);
 void printFrequencyArray (int * frequency);
-void getBitHuffmanCode (NodeTree * root, unsigned int path, int depth);
+void getBitHuffmanCode(FILE * file_zip, NodeTree * root, unsigned int path, int depth);
+void createFileZip (char * file_name, NodeTree * root, unsigned int path, int depth);
+void mensagemErro(char * mensagem);
 
 int main()
 {
@@ -60,17 +63,21 @@ int main()
 
     buildFrequencyandBufferArray("arquivo.txt", frequency, &buffer);
 
-    printf("Conteudo do arquivo: \n%s\n", buffer);
+   // printf("Conteudo do arquivo: \n%s\n", buffer);
 
     // Exibe a frequência de cada caractere
-    printFrequencyArray (frequency);
+    //printFrequencyArray (frequency);
     
     List list;
     NodeTree * root = buildHuffmanTree(&list, buffer, frequency);
 
     printHuffmanTree(root);
-    getBitHuffmanCode(root, 0, 0);
-    freeHuffmanTree (root);
+    
+    //freeHuffmanTree (root);
+
+    createFileZip("huffman.zip", root, 0, 0);
+    //getBitHuffmanCode("huffman.zip", root, 0, 0);
+    
 }
 
 void inicializeList (List * list)
@@ -266,7 +273,7 @@ void printFrequencyArray (int * frequency)
 
 
 // Função recursiva para percorrer a árvore binária
-void getBitHuffmanCode(NodeTree * root, unsigned int path, int depth) 
+void getBitHuffmanCode(FILE * file_zip, NodeTree * root, unsigned int path, int depth)
 {
     // Se o nó atual é NULL, retorne
     if (root == NULL) {
@@ -276,21 +283,44 @@ void getBitHuffmanCode(NodeTree * root, unsigned int path, int depth)
     // Se é uma folha, imprima o caminho até aqui
     if (root->left == NULL && root->right == NULL) 
     {
-        printf("Folha %c: ", root->caracter);
+        fprintf(file_zip, "Folha %c: ", root->caracter);
         for (int i = depth - 1; i >= 0; i--) 
         {
             //path >> i: Desloca o valor path para a direita por i posições, trazendo o bit de interesse para a posição menos significativa.
             //& 1: Aplica uma máscara para extrair apenas o bit menos significativo, que é o bit de interesse.
-            printf("%d", (path >> i) & 1);
+            fprintf(file_zip, "%d", (path >> i) & 1);
         }
-        printf("\n");
+        fprintf(file_zip, "\n");
+        //perguntar como eu posso resolver o problema de ler somente 1 caracter
         return;
     }
 
     // Recursão para a esquerda com bit 0
     // <<-> operador de deslocamento para a esquerda (bitwise left shift)
-    getBitHuffmanCode(root->left, path << 1, depth + 1);
+    getBitHuffmanCode(file_zip, root->left, path << 1, depth + 1);
 
     // Recursão para a direita com bit 1
-    getBitHuffmanCode(root->right, (path << 1) | 1, depth + 1);
+    getBitHuffmanCode(file_zip, root->right, (path << 1) | 1, depth + 1);
+}
+
+void mensagemErro(char * mensagem)
+{
+    printf("Erro ao %s arquivo\n", mensagem);
+}
+
+void createFileZip (char * file_name, NodeTree * root, unsigned int path, int depth)
+{
+    FILE * zip;
+    //strcat(file_name, ".zip");
+    zip = fopen(file_name, "w");
+
+    if (zip == NULL) 
+    {
+        mensagemErro("criar");
+        return;
+    }
+
+    getBitHuffmanCode(zip, root, path, depth);
+    
+    //fclose(zip);
 }
