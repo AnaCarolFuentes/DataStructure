@@ -40,9 +40,33 @@ void printFrequencyArray (int * frequency);
 void getBitHuffmanCode(FILE * file_zip, NodeTree * root, unsigned int path, int depth);
 void createFileZip (char * file_name, NodeTree * root, unsigned int path, int depth);
 void mensagemErro(char * mensagem);
+void createFileTxt(byte ** buffer);
+void menuOpcao();
 
 int main()
 {
+    int opcao = -1;
+    byte * buffer = NULL;
+    int frequency[256] = {0};
+
+    do
+    {
+        menuOpcao();
+        printf("Opcao: %d\n", &opcao);
+        switch(opcao)
+        {
+            case 1:
+                createFileTxt(&buffer);
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+        }
+    } while(opcao != 0);
+
+
+
     /* Lista de prioridade funcionando
     List list;
     
@@ -61,21 +85,21 @@ int main()
     byte * buffer = NULL;
     int frequency[256] = {0};
 
-    buildFrequencyandBufferArray("arquivo.txt", frequency, &buffer);
+    //buildFrequencyandBufferArray("arquivo.txt", frequency, &buffer);
 
    // printf("Conteudo do arquivo: \n%s\n", buffer);
 
     // Exibe a frequência de cada caractere
     //printFrequencyArray (frequency);
     
-    List list;
-    NodeTree * root = buildHuffmanTree(&list, buffer, frequency);
+    //List list;
+    //NodeTree * root = buildHuffmanTree(&list, buffer, frequency);
 
-    printHuffmanTree(root);
+    //printHuffmanTree(root);
     
     //freeHuffmanTree (root);
 
-    createFileZip("huffman.zip", root, 0, 0);
+   // createFileZip("huffman.zip", root, 0, 0);
     //getBitHuffmanCode("huffman.zip", root, 0, 0);
     
 }
@@ -322,5 +346,18 @@ void createFileZip (char * file_name, NodeTree * root, unsigned int path, int de
 
     getBitHuffmanCode(zip, root, path, depth);
     
-    //fclose(zip);
+    fclose(zip);
+}
+
+void menuOpcao()
+{   
+   
+    printf("1-Criar arquivo.txt com a frase\n");
+    printf("1-Modificar frase do arquivo.txt\n");
+    printf("2-Comprimir arquivo\n");
+    printf("3-Exibir árvore de Huffman\n");
+    printf("4-Exibir frase do arquivo.txt\n");
+    printf("4-Decodificar arquivo.zip\n");
+    printf("0-Sair\n");
+    
 }
